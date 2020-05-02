@@ -43,6 +43,7 @@ class Player:
         if time > 35 and time < 49:
             chargement_batterie = - self.battery_stock[time-1]/2*duree_pas_de_temps
         
+        # On vérifie qu'on ne dépasse pas la puissance max. 
         chargement_batterie = verif_pmax_batterie (self, chargement_batterie )
         return chargement_batterie
 
