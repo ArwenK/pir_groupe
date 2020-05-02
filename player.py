@@ -40,6 +40,11 @@ class Player:
         # Déchargement de la batterie la nuit 
         if time == 0:
             chargement_batterie = 0
+        # heures où l'électricité est très chère de 12 à 15 et de 40 à 43 (inclus) 
+        # cas 1 : la batterie est très remplie : on décharge la batterie de pmax aux heures chères et le reste de la batterie 
+        # pendant le reste de la nuit 
+        
+        # cas 2 : la batterie est moins remplie : on décharge la batterie de self.battery_stock[40]/6 aux heures chères 
         if time > 0 and time < 18:
             chargement_batterie = -self.battery_stock[time-1]/2*duree_pas_de_temps
         if time > 35 and time < 49:
