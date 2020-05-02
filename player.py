@@ -17,34 +17,59 @@ class Player:
         self.imbalance=[]
 
     def take_decision(self, time):
-            duree_pas_de_temps = 0.5
-            # TO DO:
-            # changer signes
+         def verif_pmax_batterie (self, chargement): 
+            """ 
+            Prend en argument une batterie et un chargement (ou un déchargement selon le signe)
+            Vérifie que la puissance de chargement ne dépasse pas la puissance maximale de la batterie
+            Renvoie le chargement possible.  
+            """
+            if (abs(chargement) > self.max_load):
+                chargement = self.max_load*np.sign(chargement)
+            return chargement 
 
-            if time == 0:
-                return 0
+        
+        duree_pas_de_temps = 0.5 
+        
+        if time == 0:
+            chargement_batterie = 0
+        if time > 0 and time < 18:
+            chargement_batterie = -self.battery_stock[time-1]/2*duree_pas_de_temps
 
-            if time > 0 and time < 18:
-                return -self.battery_stock[time-1]/2*duree_pas_de_temps
+        elif time >= 18 and time < 36:
+            chargement_batterie = self.sun[time-1] / 2
+            if (self.battery_stock[time-1] + chargement_batterie * duree_pas_de_temps) > self.capacity:
+                chargement_batterie = (self.capacity - self.battery_stock[time-1]) / duree_pas_de_temps
 
-            elif time > 17 and time < 36:
-                chargement_batterie = self.sun[time-1] / 2
-                if (self.battery_stock[time-1] + chargement_batterie * duree_pas_de_temps) < self.capacity:
-                    if (chargement_batterie < self.max_load):
-                        return chargement_batterie
-                    else :
-                        chargement_batterie = self.max_load
-                        return chargement_batterie
-                else:
-                    chargement_batterie = (self.capacity - self.battery_stock[time-1]) / duree_pas_de_temps
-                    if (chargement_batterie < self.max_load):
-                        return chargement_batterie
-                    else:
-                        chargement_batterie = self.max_load
-                        return chargement_batterie
+        if time > 35 and time < 49:
+            chargement_batterie = - self.battery_stock[time-1]/2*duree_pas_de_temps
+        
+        chargement_batterie = verif_pmax_batterie (self, chargement_batterie )
+        return chargement_batterie
 
-            if time > 35 and time < 49:
-                return -self.battery_stock[time-1]/2*duree_pas_de_temps
+            #if time == 0:
+            #    return 0
+
+            #if time > 0 and time < 18:
+            #    return -self.battery_stock[time-1]/2*duree_pas_de_temps
+
+            #elif time > 17 and time < 36:
+            #    chargement_batterie = self.sun[time-1] / 2
+            #    if (self.battery_stock[time-1] + chargement_batterie * duree_pas_de_temps) < self.capacity:
+            #       if (chargement_batterie < self.max_load):
+            #            return chargement_batterie
+            #        else :
+            #            chargement_batterie = self.max_load
+            #            return chargement_batterie
+            #    else:
+            #        chargement_batterie = (self.capacity - self.battery_stock[time-1]) / duree_pas_de_temps
+            #        if (chargement_batterie < self.max_load):
+            #            return chargement_batterie
+            #        else:
+            #            chargement_batterie = self.max_load
+            #            return chargement_batterie
+
+            #if time > 35 and time < 49:
+            #    return -self.battery_stock[time-1]/2*duree_pas_de_temps
 
     def update_battery_stock(self, time,load):
             if abs(load) > self.max_load:
