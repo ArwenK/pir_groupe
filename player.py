@@ -30,16 +30,18 @@ class Player:
         
         duree_pas_de_temps = self.dt
         
-        if time == 0:
-            chargement_batterie = 0
-        if time > 0 and time < 18:
-            chargement_batterie = -self.battery_stock[time-1]/2*duree_pas_de_temps
-
+        
+        # chargement de la batterie lorsque le soleil brille 
         elif time >= 18 and time < 36:
             chargement_batterie = self.sun[time-1] / 2
             if (self.battery_stock[time-1] + chargement_batterie * duree_pas_de_temps) > self.capacity:
                 chargement_batterie = (self.capacity - self.battery_stock[time-1]) / duree_pas_de_temps
-
+        
+        # Déchargement de la batterie la nuit 
+        if time == 0:
+            chargement_batterie = 0
+        if time > 0 and time < 18:
+            chargement_batterie = -self.battery_stock[time-1]/2*duree_pas_de_temps
         if time > 35 and time < 49:
             chargement_batterie = - self.battery_stock[time-1]/2*duree_pas_de_temps
         
