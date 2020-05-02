@@ -28,7 +28,7 @@ class Player:
             return chargement 
 
         
-        duree_pas_de_temps = 0.5 
+        duree_pas_de_temps = self.dt
         
         if time == 0:
             chargement_batterie = 0
